@@ -36,6 +36,8 @@ namespace Player
             currentFrameIndex = 0;
             playbackStartTime = Time.time;
             isPlaying = true;
+
+            rb.velocity = recording.startVelocity;
         }
 
         private void CreateGroundCheck()

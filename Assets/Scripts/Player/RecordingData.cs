@@ -17,6 +17,7 @@ namespace Player
     {
         public List<FrameData> frames = new List<FrameData>();
         public Vector2 startPosition;
+        public Vector2 startVelocity;
         public float totalDuration;
 
         public void Clear()

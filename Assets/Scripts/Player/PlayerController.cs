@@ -30,7 +30,7 @@ namespace Player
         private float horizontalInput;
         private bool jumpPressed; //是否按下跳跃键
         private GameObject activeClone; //当前存在的克隆对象
-        private GameObject recordingGhost;
+        private GameObject recordingGhost; //录制时的半透明预览对象
 
         private void Awake()
         {
@@ -39,49 +39,54 @@ namespace Player
 
         private void Update()
         {
+            //触地检测
             CheckGround();
+            //跳跃处理
             HandleJump();
+            //录制输入检测
             HandleRecordingInput();
         }
 
         private void FixedUpdate()
         {
+            //移动检测
             HandleMovement();
+            //录制帧数据
             RecordFrame();
+            //重置跳跃状态，确保下一帧能捕捉新跳跃
+            jumpPressed = false;
         }
-
-        private void HandleMovement()
+        private void HandleMovement() //移动
         {
             horizontalInput = Input.GetAxis("Horizontal");
             rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
         }
-
-        private void HandleJump()
+        private void HandleJump()  //跳跃
         {
-            jumpPressed = Input.GetButtonDown("Jump");
-            if (jumpPressed && isGrounded)
+            if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                jumpPressed = true;
             }
         }
-
-        private void CheckGround()
+        
+        private void CheckGround()  //触地检测
         {
             if (groundCheck == null) return;
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         }
 
-        private void HandleRecordingInput()
+        private void HandleRecordingInput() //录制输入检测
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (!isRecording)
                 {
-                    StartRecording();
+                    StartRecording(); //开始录制
                 }
                 else
                 {
-                    StopRecording();
+                    StopRecording();  //结束录制
                 }
             }
 
@@ -91,7 +96,7 @@ namespace Player
             }
         }
 
-        private void StartRecording()
+        private void StartRecording()  //开始录制
         {
             if (activeClone != null)
             {
@@ -108,19 +113,22 @@ namespace Player
             recordingStartTime = Time.time;
             CurrentRecording.Clear();
             CurrentRecording.startPosition = transform.position;
+            CurrentRecording.startVelocity = rb.velocity;
 
             CreateRecordingGhost();
+            Debug.Log("录制开始");
         }
 
-        private void StopRecording()
+        private void StopRecording() //结束录制
         {
             isRecording = false;
+            Debug.Log("录制结束");
         }
 
-        private void RecordFrame()
+        private void RecordFrame() //录制帧数据
         {
             if (!isRecording) return;
-
+            //计算录制时间，检测是否超过四秒
             float elapsed = Time.time - recordingStartTime;
             if (elapsed > maxRecordDuration)
             {
@@ -141,7 +149,7 @@ namespace Player
             CurrentRecording.AddFrame(frame);
         }
 
-        private void SpawnClone()
+        private void SpawnClone()  //生成克隆体
         {
             if (recordingGhost != null)
             {
@@ -167,7 +175,7 @@ namespace Player
             }
         }
 
-        private void CreateRecordingGhost()
+        private void CreateRecordingGhost() //创建半透明克隆体
         {
             recordingGhost = new GameObject("RecordingGhost");
             recordingGhost.transform.position = transform.position;
@@ -181,13 +189,13 @@ namespace Player
             }
         }
 
-        private GameObject CreateClonePrefab()
+        private GameObject CreateClonePrefab() //获得克隆预制体
         {
             GameObject prefab = Resources.Load<GameObject>("Player/Clone");
             return prefab;
         }
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmosSelected() //在编辑器中显示触地检测范围
         {
             if (groundCheck == null) return;
             Gizmos.color = Color.green;
