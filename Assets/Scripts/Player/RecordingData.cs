@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Player
 {
-    public struct FrameData
+    public struct FrameData //帧数据结构体
     {
         public float time;
         public Vector2 position;
@@ -13,7 +13,7 @@ namespace Player
         public bool isGrounded;
     }
 
-    public class RecordingData
+    public class RecordingData //录制数据类，用于存储每一帧的状态和输入
     {
         public List<FrameData> frames = new List<FrameData>();
         public Vector2 startPosition;

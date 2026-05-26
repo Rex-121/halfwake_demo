@@ -179,6 +179,7 @@ namespace Player
         {
             recordingGhost = new GameObject("RecordingGhost");
             recordingGhost.transform.position = transform.position;
+            recordingGhost.transform.localScale = transform.lossyScale;
 
             SpriteRenderer ghostSprite = recordingGhost.AddComponent<SpriteRenderer>();
             SpriteRenderer playerSprite = GetComponentInChildren<SpriteRenderer>();

@@ -5,7 +5,7 @@ namespace Player
     [RequireComponent(typeof(Rigidbody2D))]
     public class CloneController : MonoBehaviour
     {
-        private RecordingData recording;
+        private RecordingData recording; //录制数据类
         private float moveSpeed;
         private float jumpForce;
         private LayerMask groundLayer;
@@ -56,6 +56,7 @@ namespace Player
             if (elapsed > recording.totalDuration)
             {
                 isPlaying = false;
+                Destroy(gameObject);
                 return;
             }
 
