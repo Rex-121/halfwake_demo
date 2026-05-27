@@ -20,6 +20,7 @@ namespace Record
             if (main == null)
             {
                 main = this;
+                Make();
             }
             else
             {
@@ -27,7 +28,7 @@ namespace Record
             }
         }
 
-        private void Start()
+        private void Make()
         {
             Observable.EveryUpdate()
                 .Where(_ => Input.GetKeyDown(KeyCode.R))

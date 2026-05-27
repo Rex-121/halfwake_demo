@@ -6,10 +6,6 @@ namespace Record
     public class CloneController : MonoBehaviour
     {
         private Record recording;
-        private float moveSpeed;
-        private float jumpForce;
-        private LayerMask groundLayer;
-        private float groundCheckRadius;
 
         private Rigidbody2D rb;
         private Transform groundCheck;
@@ -23,14 +19,9 @@ namespace Record
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
-        public void Initialize(Record data, float speed, float jump, LayerMask layer, float radius)
+        public void Initialize(Record data)
         {
             recording = data;
-            moveSpeed = speed;
-            jumpForce = jump;
-            groundLayer = layer;
-            groundCheckRadius = radius;
-
             CreateGroundCheck();
 
             currentFrameIndex = 0;
@@ -66,14 +57,15 @@ namespace Record
                 currentFrameIndex++;
             }
 
-            ApplyFrame(rb, recording.frames[currentFrameIndex], moveSpeed, jumpForce);
+            var frame = recording.frames[currentFrameIndex];
+            ApplyFrame(rb, frame);
         }
-        
-        public void ApplyFrame(Rigidbody2D rb, RecordedFrame frame, float moveSpeed, float jumpForce)
+
+        public void ApplyFrame(Rigidbody2D rb, RecordedFrame frame)
         {
-            rb.velocity = new Vector2(frame.inputX * moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(frame.inputX * frame.moveSpeed, rb.velocity.y);
             if (frame.jump)
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                rb.velocity = new Vector2(rb.velocity.x, frame.jumpForce);
         }
 
         private void OnDestroy()

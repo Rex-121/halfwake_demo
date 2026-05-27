@@ -8,11 +8,13 @@ namespace Record
         public float inputX;
         public bool jump;
         public float time;
+        public float moveSpeed;
+        public float jumpForce;
     }
 
     public class Record
     {
-        public List<RecordedFrame> frames { get; private set; } = new List<RecordedFrame>();
+        public readonly List<RecordedFrame> frames = new();
         public Vector2 startPosition;
         public Vector2 startVelocity;
         public float totalDuration;

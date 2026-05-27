@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using Record;
 using Controller;
 
@@ -8,10 +6,6 @@ namespace Player
 {
     public class PlayerController : RecordableController
     {
-        private float moveSpeed => 玩家配置.main.moveSpeed;
-        private float jumpForce => 玩家配置.main.jumpForce;
-        private float maxRecordDuration => 玩家配置.main.maxRecordDuration;
-
         [SerializeField] private Transform groundCheck;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float groundCheckRadius = 0.2f;
@@ -19,21 +13,31 @@ namespace Player
         private bool isGrounded;
         private float horizontalInput;
         private bool jumpPressed;
+        private bool jumpHeld;
 
         private void Update()
         {
             horizontalInput = Input.GetAxis("Horizontal");
+            jumpHeld = Input.GetButton("Jump");
             if (Input.GetButtonDown("Jump") && isGrounded)
                 jumpPressed = true;
 
             CheckGround();
         }
 
+        private RecordedFrame frame => new(){ inputX = horizontalInput, jump = jumpPressed, moveSpeed = 玩家配置.main.moveSpeed , jumpForce = 玩家配置.main.jumpForce };
         private void FixedUpdate()
         {
-            var frame = new RecordedFrame { inputX = horizontalInput, jump = jumpPressed };
-            ApplyFrame(rb, frame);
-            record.RecordFrame(frame);
+            record.RecordFrame(ApplyFrame(rb, frame));
+
+            // //松开跳跃键截断上升
+            // if (!jumpHeld && rb.velocity.y > 0)
+            //     rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            //
+            // //下落时加重力
+            // if (rb.velocity.y < 0)
+            //     rb.velocity += Vector2.up * Physics2D.gravity.y * Time.fixedDeltaTime;
+
             jumpPressed = false;
         }
 
@@ -41,18 +45,6 @@ namespace Player
         {
             if (groundCheck == null) return;
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        }
-
-        protected override float GetMoveSpeed() => moveSpeed;
-        protected override float GetJumpForce() => jumpForce;
-        protected override LayerMask GetGroundLayer() => groundLayer;
-        protected override float GetGroundCheckRadius() => groundCheckRadius;
-
-        private void OnDrawGizmosSelected()
-        {
-            if (groundCheck == null) return;
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
     }
 }

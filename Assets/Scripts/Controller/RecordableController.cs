@@ -17,8 +17,13 @@ namespace Controller
         {
             rb = GetComponent<Rigidbody2D>();
             record = new Record.Record(玩家配置.main.maxRecordDuration);
+        }
+
+        protected virtual void Start()
+        {
             SubscribeRecordController();
         }
+
         protected void SubscribeRecordController()
         {
             var rc = RecordController.main;
@@ -58,11 +63,12 @@ namespace Controller
             record.recording = false;
         }
 
-        protected void ApplyFrame(Rigidbody2D rb, RecordedFrame frame)
+        protected RecordedFrame ApplyFrame(Rigidbody2D rb, RecordedFrame frame)
         {
-            rb.velocity = new Vector2(frame.inputX * 玩家配置.main.moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(frame.inputX * frame.moveSpeed, rb.velocity.y);
             if (frame.jump)
-                rb.velocity = new Vector2(rb.velocity.x, 玩家配置.main.jumpForce);
+                rb.velocity = new Vector2(rb.velocity.x, frame.jumpForce);
+            return frame;
         }
         public void SpawnClone()
         {
@@ -82,7 +88,7 @@ namespace Controller
             var cloneController = activeClone.GetComponent<CloneController>();
             if (cloneController != null)
             {
-                cloneController.Initialize(record, GetMoveSpeed(), GetJumpForce(), GetGroundLayer(), GetGroundCheckRadius());
+                cloneController.Initialize(record);
             }
         }
 
@@ -105,11 +111,5 @@ namespace Controller
         {
             return Resources.Load<GameObject>("Player/Clone");
         }
-
-        //子类实现
-        protected abstract float GetMoveSpeed();
-        protected abstract float GetJumpForce();
-        protected abstract LayerMask GetGroundLayer();
-        protected abstract float GetGroundCheckRadius();
     }
 }
