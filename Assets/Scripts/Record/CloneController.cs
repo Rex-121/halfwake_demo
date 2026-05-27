@@ -66,7 +66,14 @@ namespace Record
                 currentFrameIndex++;
             }
 
-            FrameDriver.ApplyFrame(rb, recording.frames[currentFrameIndex].input, moveSpeed, jumpForce);
+            ApplyFrame(rb, recording.frames[currentFrameIndex], moveSpeed, jumpForce);
+        }
+        
+        public void ApplyFrame(Rigidbody2D rb, RecordedFrame frame, float moveSpeed, float jumpForce)
+        {
+            rb.velocity = new Vector2(frame.inputX * moveSpeed, rb.velocity.y);
+            if (frame.jump)
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
         private void OnDestroy()
