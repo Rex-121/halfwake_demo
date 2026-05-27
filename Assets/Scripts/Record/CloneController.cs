@@ -5,7 +5,7 @@ namespace Record
     [RequireComponent(typeof(Rigidbody2D))]
     public class CloneController : MonoBehaviour
     {
-        private RecordingData recording;
+        private Record recording;
         private float moveSpeed;
         private float jumpForce;
         private LayerMask groundLayer;
@@ -23,7 +23,7 @@ namespace Record
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
-        public void Initialize(RecordingData data, float speed, float jump, LayerMask layer, float radius)
+        public void Initialize(Record data, float speed, float jump, LayerMask layer, float radius)
         {
             recording = data;
             moveSpeed = speed;

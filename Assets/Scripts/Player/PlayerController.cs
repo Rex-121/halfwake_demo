@@ -6,7 +6,7 @@ using Record;
 namespace Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerController : MonoBehaviour, IRecordable
+    public class PlayerController : MonoBehaviour
     {
         private float moveSpeed => 玩家配置.main.moveSpeed;
         private float jumpForce => 玩家配置.main.jumpForce;
@@ -17,12 +17,9 @@ namespace Player
         [SerializeField] private float groundCheckRadius = 0.2f;
         [SerializeField] private GameObject clonePrefab;
 
-        public RecordingData CurrentRecording { get; private set; } = new RecordingData();
-
+        private Record.Record record;
         private Rigidbody2D rb;
         private bool isGrounded;
-        private bool isRecording;
-        private float recordingStartTime;
         private FrameData currentInput;
         private GameObject activeClone;
         private GameObject recordingGhost;
@@ -30,11 +27,11 @@ namespace Player
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            record = new Record.Record(maxRecordDuration);
         }
 
         private void Update()
         {
-            //采集输入
             currentInput.inputX = Input.GetAxis("Horizontal");
             if (Input.GetButtonDown("Jump") && isGrounded)
                 currentInput.jump = true;
@@ -45,11 +42,8 @@ namespace Player
 
         private void FixedUpdate()
         {
-            //用RF驱动移动
             FrameDriver.ApplyFrame(rb, currentInput, moveSpeed, jumpForce);
-            //录制
-            RecordFrame();
-            //重置跳跃
+            record.RecordFrame(currentInput, transform.position, rb.velocity, isGrounded);
             currentInput.jump = false;
         }
 
@@ -63,68 +57,29 @@ namespace Player
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                if (!isRecording)
-                    StartRecording();
+                if (!record.IsRecording)
+                {
+                    if (activeClone != null)
+                    {
+                        Destroy(activeClone);
+                        activeClone = null;
+                    }
+                    if (recordingGhost != null)
+                        Destroy(recordingGhost);
+
+                    record.StartRecording(transform.position, rb.velocity);
+                    CreateRecordingGhost();
+                }
                 else
-                    StopRecording();
+                {
+                    record.StopRecording();
+                }
             }
 
-            if (Input.GetKeyDown(KeyCode.X) && CurrentRecording.frames.Count > 0)
+            if (Input.GetKeyDown(KeyCode.X) && record.frames.Count > 0)
             {
                 SpawnClone();
             }
-        }
-
-        public void StartRecording()
-        {
-            if (activeClone != null)
-            {
-                Destroy(activeClone);
-                activeClone = null;
-            }
-
-            if (recordingGhost != null)
-            {
-                Destroy(recordingGhost);
-            }
-
-            isRecording = true;
-            recordingStartTime = Time.time;
-            CurrentRecording.Clear();
-            CurrentRecording.startPosition = transform.position;
-            CurrentRecording.startVelocity = rb.velocity;
-
-            CreateRecordingGhost();
-            Debug.Log("录制开始");
-        }
-
-        public void StopRecording()
-        {
-            isRecording = false;
-            Debug.Log("录制结束");
-        }
-
-        private void RecordFrame()
-        {
-            if (!isRecording) return;
-
-            float elapsed = Time.time - recordingStartTime;
-            if (elapsed > maxRecordDuration)
-            {
-                StopRecording();
-                return;
-            }
-
-            RecordedFrame frame = new RecordedFrame
-            {
-                time = elapsed,
-                input = currentInput,
-                position = transform.position,
-                velocity = rb.velocity,
-                isGrounded = isGrounded
-            };
-
-            CurrentRecording.AddFrame(frame);
         }
 
         private void SpawnClone()
@@ -145,11 +100,11 @@ namespace Player
                 clonePrefab = CreateClonePrefab();
             }
 
-            activeClone = Instantiate(clonePrefab, CurrentRecording.startPosition, Quaternion.identity);
+            activeClone = Instantiate(clonePrefab, record.startPosition, Quaternion.identity);
             var cloneController = activeClone.GetComponent<CloneController>();
             if (cloneController != null)
             {
-                cloneController.Initialize(CurrentRecording, moveSpeed, jumpForce, groundLayer, groundCheckRadius);
+                cloneController.Initialize(record, moveSpeed, jumpForce, groundLayer, groundCheckRadius);
             }
         }
 
