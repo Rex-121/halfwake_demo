@@ -1,11 +1,11 @@
 using UnityEngine;
 
-namespace Player
+namespace Record
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class CloneController : MonoBehaviour
     {
-        private RecordingData recording; //录制数据类
+        private RecordingData recording;
         private float moveSpeed;
         private float jumpForce;
         private LayerMask groundLayer;
@@ -60,19 +60,13 @@ namespace Player
                 return;
             }
 
-            while (currentFrameIndex < recording.frames.Count - 1 && recording.frames[currentFrameIndex + 1].time <= elapsed)
+            while (currentFrameIndex < recording.frames.Count - 1
+                   && recording.frames[currentFrameIndex + 1].time <= elapsed)
             {
                 currentFrameIndex++;
             }
 
-            FrameData currentFrame = recording.frames[currentFrameIndex];
-
-            rb.velocity = new Vector2(currentFrame.inputX * moveSpeed, rb.velocity.y);
-
-            if (currentFrame.jump)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            }
+            FrameDriver.ApplyFrame(rb, recording.frames[currentFrameIndex].input, moveSpeed, jumpForce);
         }
 
         private void OnDestroy()
