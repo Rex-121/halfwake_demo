@@ -8,6 +8,8 @@ namespace Player
     public class PlayerAnimation : MonoBehaviour
     {
         [SerializeField] private Sprite[] jumpSprites;
+
+        public Sprite[] JumpSprites => jumpSprites;
         [SerializeField] private float jumpFrameInterval = 0.15f;
         [SerializeField] private float landFrameInterval = 0.1f;
 
