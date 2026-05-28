@@ -1,6 +1,7 @@
 using UnityEngine;
 using Record;
 using Controller;
+using Sirenix.OdinInspector;
 
 namespace Player
 {
@@ -10,17 +11,23 @@ namespace Player
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private float groundCheckRadius = 0.2f;
 
+        [ShowInInspector, ReadOnly, LabelText("是否在地面")]
         private bool isGrounded;
         private float horizontalInput;
         private bool jumpPressed;
         private bool jumpHeld;
-
+        
+        [ShowInInspector, SerializeField]
+        private PlayerAnimation avatar;
+        
         private void Update()
         {
             horizontalInput = Input.GetAxis("Horizontal");
             jumpHeld = Input.GetButton("Jump");
             if (Input.GetButtonDown("Jump") && isGrounded)
                 jumpPressed = true;
+
+           avatar.UpdateInput(horizontalInput, jumpPressed);
 
             CheckGround();
         }

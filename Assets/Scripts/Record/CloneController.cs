@@ -59,6 +59,9 @@ namespace Record
 
             var frame = recording.frames[currentFrameIndex];
             ApplyFrame(rb, frame);
+
+            if (frame.inputX != 0)
+                transform.localScale = new Vector3(-Mathf.Sign(frame.inputX) * 3f, 3f, 3f);
         }
 
         public void ApplyFrame(Rigidbody2D rb, RecordedFrame frame)

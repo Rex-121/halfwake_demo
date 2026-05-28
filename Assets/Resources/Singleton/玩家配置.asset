@@ -21,6 +21,6 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  moveSpeed: 12
+  moveSpeed: 30
   jumpForce: 30
   maxRecordDuration: 4
