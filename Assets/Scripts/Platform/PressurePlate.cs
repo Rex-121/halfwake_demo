@@ -1,5 +1,6 @@
 using System;
-using System.Collections.Generic;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Platform
@@ -9,23 +10,39 @@ namespace Platform
         public event Action<PressurePlate, bool> OnActivationChanged;
 
         [SerializeField] private string[] activatorTags = { "Player", "Clone" };
+        [SerializeField] private float pressDuration = 0.3f;
 
-        private HashSet<Collider2D> collidersInside = new HashSet<Collider2D>();
         private bool wasActivated;
+        private Vector3 originPos;
+        private Tween tween;
 
-        private void OnTriggerEnter2D(Collider2D other)
+        [ShowInInspector, SerializeField]
+        private Transform animationTransform;
+        private void Start()
         {
-            if (IsValidActivator(other))
-            {
-                collidersInside.Add(other);
-                CheckActivation();
-            }
+            originPos = transform.position;
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (wasActivated || !IsValidActivator(other)) return;
+            wasActivated = true;
+            Debug.Log($"压力板 {gameObject.name} 被激活");
+            tween?.Kill();
+            tween = animationTransform.DOMoveY(originPos.y - animationTransform.lossyScale.y / 2f, pressDuration)
+                .SetEase(Ease.InOutCubic);
+            OnActivationChanged?.Invoke(this, true);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (collidersInside.Remove(other))
-                CheckActivation();
+            if (!wasActivated || !IsValidActivator(other)) return;
+            wasActivated = false;
+            Debug.Log($"压力板 {gameObject.name} 取消激活");
+            tween?.Kill();
+            tween = animationTransform.DOMoveY(originPos.y, pressDuration)
+                .SetEase(Ease.InOutCubic);
+            OnActivationChanged?.Invoke(this, false);
         }
 
         private bool IsValidActivator(Collider2D col)
@@ -39,25 +56,18 @@ namespace Platform
             return false;
         }
 
-        private void CheckActivation()
-        {
-            bool isActivated = collidersInside.Count > 0;
-            if (isActivated != wasActivated)
-            {
-                wasActivated = isActivated;
-                Debug.Log($"压力板 {gameObject.name} {(isActivated ? "被激活" : "取消激活")}");
-                OnActivationChanged?.Invoke(this, isActivated);
-            }
-        }
-
         private void OnDisable()
         {
-            collidersInside.Clear();
             if (wasActivated)
             {
                 wasActivated = false;
                 OnActivationChanged?.Invoke(this, false);
             }
+        }
+
+        private void OnDestroy()
+        {
+            tween?.Kill();
         }
     }
 }
