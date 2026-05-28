@@ -15,6 +15,9 @@ namespace Platform
         private bool wasActivated;
         private Vector3 originPos;
         private Tween tween;
+        
+        
+        public GrowPlatform growPlatform;
 
         [ShowInInspector, SerializeField]
         private Transform animationTransform;
@@ -32,6 +35,7 @@ namespace Platform
             tween = animationTransform.DOMoveY(originPos.y - animationTransform.lossyScale.y / 2f, pressDuration)
                 .SetEase(Ease.InOutCubic);
             OnActivationChanged?.Invoke(this, true);
+            if (growPlatform != null) growPlatform.Grow();
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -43,6 +47,7 @@ namespace Platform
             tween = animationTransform.DOMoveY(originPos.y, pressDuration)
                 .SetEase(Ease.InOutCubic);
             OnActivationChanged?.Invoke(this, false);
+            if (growPlatform != null) growPlatform.Shrink();
         }
 
         private bool IsValidActivator(Collider2D col)
