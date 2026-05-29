@@ -1,3 +1,4 @@
+
 using System;
 using UnityEngine;
 using UniRx;
@@ -20,7 +21,6 @@ namespace Record
             if (main == null)
             {
                 main = this;
-                Make();
             }
             else
             {
@@ -28,22 +28,27 @@ namespace Record
             }
         }
 
-        private void Make()
+        private void Update()
         {
-            Observable.EveryUpdate()
-                .Where(_ => Input.GetKeyDown(KeyCode.R))
-                .Subscribe(_ =>
-                {
-                    isRecording = !isRecording;
-                    onIsRecording.OnNext(isRecording);
-                })
-                .AddTo(this);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                isRecording = !isRecording;
+                onIsRecording.OnNext(isRecording);
+            }
 
-            Observable.EveryUpdate()
-                .Where(_ => Input.GetKeyDown(KeyCode.X))
-                .Subscribe(_ => onSpawnPressed.OnNext(Unit.Default))
-                .AddTo(this);
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                onSpawnPressed.OnNext(Unit.Default);
+            }
         }
-        
+
+        /// <summary>
+        /// 外部调用停止录制
+        /// </summary>
+        public void StopRecording()
+        {
+            isRecording = false;
+            onIsRecording.OnNext(false);
+        }
     }
 }
