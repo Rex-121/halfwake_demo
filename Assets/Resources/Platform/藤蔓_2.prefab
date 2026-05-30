@@ -281,6 +281,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDistance: 3
-  startMovingRight: 1
+  moveLeft: 1
   speed: 2
-  maskedColor: {r: 1, g: 0.06132078, b: 0.06132078, a: 0.3}
+  pingPong: 0
+  reverseSpeed: 2
+  maskedColor: {r: 1, g: 1, b: 1, a: 0.3}
+  OnReverseComplete:
+    m_PersistentCalls:
+      m_Calls: []
