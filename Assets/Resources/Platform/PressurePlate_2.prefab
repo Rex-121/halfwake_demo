@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5193102098905566084
 Transform:
   m_ObjectHideFlags: 0
@@ -57,8 +57,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Platform.GrowPlatform, Assembly-CSharp
-        m_MethodName: Grow
+        m_TargetAssemblyTypeName: Platform.MaskedHorizontalPlatform, Assembly-CSharp
+        m_MethodName: Activate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -95,9 +95,9 @@ MonoBehaviour:
   OnReleased:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Platform.MaskedHorizontalPlatform, Assembly-CSharp
-        m_MethodName: Deactivate
+      - m_Target: {fileID: 8847216823127868165}
+        m_TargetAssemblyTypeName: Platform.PressurePlate, Assembly-CSharp
+        m_MethodName: OnHideMe
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -108,8 +108,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Platform.MaskedObject, Assembly-CSharp
-        m_MethodName: ApplyMask
+        m_TargetAssemblyTypeName: Platform.MaskedHorizontalPlatform, Assembly-CSharp
+        m_MethodName: Deactivate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
