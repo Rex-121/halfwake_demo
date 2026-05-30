@@ -65,7 +65,7 @@ public class RecordingUIController : MonoBehaviour
     private void HideRecordingUI()
     {
         recordingHUD.SetStatus("录制完成");
-        recordingHUD.SetProgress(1f);
+        recordingHUD.SetProgress(0f);
         recordingHUD.SetTimer(0f);
     }
 
