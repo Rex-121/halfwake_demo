@@ -21,7 +21,7 @@ namespace Platform
             {
                 // 这里调用关卡完成逻辑，例如加载下一关
                 Debug.Log("关卡完成！");
-                // GameManager.Instance.CompleteLevel();
+                
             }
         }
     }
