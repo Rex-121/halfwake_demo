@@ -109,6 +109,28 @@ namespace Platform
             OnActivationChanged?.Invoke(this, false);
             OnReleased?.Invoke();
         }
+        //显示自己
+        public void OnShowMe()
+        {
+            if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+            else
+            {
+                // 已经显示了，闪烁一下提示玩家
+                animationTransform.DOShakePosition(0.5f, 0.2f, 20, 90);
+            }
+        }
+        //隐藏自己
+        public void OnHideMe()
+        {
+            if (gameObject.activeSelf)
+            gameObject.SetActive(false);
+            else
+            {
+                // 已经隐藏了，闪烁一下提示玩家
+                animationTransform.DOShakePosition(0.5f, 0.2f, 20, 90);
+            }
+        }
 
         private bool IsValidActivator(Collider2D col)
         {
