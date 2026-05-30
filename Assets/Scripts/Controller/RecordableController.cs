@@ -24,6 +24,16 @@ namespace Controller
             SubscribeRecordController();
         }
 
+        protected void Update()
+        {
+            // 4秒后自动结束录制
+            if (record.recording && record.GetProgress() >= 1f)
+            {
+                record.recording = false;
+                RecordController.main.StopRecording();
+            }
+        }
+
         protected void SubscribeRecordController()
         {
             var rc = RecordController.main;
@@ -62,6 +72,21 @@ namespace Controller
         {
             record.recording = false;
         }
+
+        /// <summary>
+        /// 当前录制进度 (0~1)
+        /// </summary>
+        public float RecordingProgress => record.GetProgress();
+
+        /// <summary>
+        /// 剩余录制时间（秒）
+        /// </summary>
+        public float RemainingTime => record.GetRemainingTime();
+
+        /// <summary>
+        /// 当前是否正在录制
+        /// </summary>
+        public bool IsCurrentlyRecording => record.recording;
 
         protected RecordedFrame ApplyFrame(Rigidbody2D rb, RecordedFrame frame)
         {

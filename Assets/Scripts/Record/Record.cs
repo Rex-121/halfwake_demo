@@ -48,6 +48,26 @@ namespace Record
             if (elapsed > totalDuration)
                 totalDuration = elapsed;
         }
+
+        /// <summary>
+        /// 获取当前录制进度 (0~1)
+        /// </summary>
+        public float GetProgress()
+        {
+            if (!recording) return 0f;
+            float elapsed = Time.time - recordingStartTime;
+            return Mathf.Clamp01(elapsed / maxDuration);
+        }
+
+        /// <summary>
+        /// 获取剩余录制时间
+        /// </summary>
+        public float GetRemainingTime()
+        {
+            if (!recording) return 0f;
+            float elapsed = Time.time - recordingStartTime;
+            return Mathf.Max(0f, maxDuration - elapsed);
+        }
     }
 
  

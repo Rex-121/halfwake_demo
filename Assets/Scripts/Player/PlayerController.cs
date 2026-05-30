@@ -22,6 +22,8 @@ namespace Player
         
         private void Update()
         {
+            base.Update();  // 调用父类 Update（自动停止录制逻辑）
+
             horizontalInput = Input.GetAxis("Horizontal");
             jumpHeld = Input.GetButton("Jump");
             if (Input.GetButtonDown("Jump") && isGrounded)
