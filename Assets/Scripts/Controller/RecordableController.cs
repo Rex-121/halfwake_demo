@@ -88,9 +88,33 @@ namespace Controller
         /// </summary>
         public bool IsCurrentlyRecording => record.recording;
 
+        private Rigidbody2D _platformRb;
+        private Vector2 _platformVelocity;
+
+        void OnCollisionEnter2D(Collision2D col)
+        {
+            if (col.collider.attachedRigidbody == null) return;
+            if (col.contactCount > 0 && col.contacts[0].normal.y > 0.5f)
+                _platformRb = col.collider.attachedRigidbody;
+        }
+
+        void OnCollisionExit2D(Collision2D col)
+        {
+            if (_platformRb != null && col.collider.attachedRigidbody == _platformRb)
+            {
+                _platformRb = null;
+                _platformVelocity = Vector2.zero;
+            }
+        }
+
+        void FixedUpdate()
+        {
+            _platformVelocity = _platformRb != null ? _platformRb.velocity : Vector2.zero;
+        }
+
         protected RecordedFrame ApplyFrame(Rigidbody2D rb, RecordedFrame frame)
         {
-            rb.velocity = new Vector2(frame.inputX * frame.moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(frame.inputX * frame.moveSpeed + _platformVelocity.x, rb.velocity.y);
             if (frame.jump)
                 rb.velocity = new Vector2(rb.velocity.x, frame.jumpForce);
             return frame;
