@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace 藤蔓
 {
-        [Serializable]
+        [Serializable, InlineProperty, Title("生长")]
         public struct 生长
         {
-            [SerializeField]
+            [SerializeField, HorizontalGroup, LabelWidth(30)]
             public float 速度;
-            [SerializeField]
+            [SerializeField, HorizontalGroup, LabelWidth(30)]
             public float 距离;
-
         }
 }

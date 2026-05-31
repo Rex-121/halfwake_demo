@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class 藤蔓茎 : MonoBehaviour
 {
-    public float speed = 2f;
-    public float distance = 5f;
-
-    [SerializeField]
-    public 藤蔓.生长 生长;
+    [ShowInInspector, HideLabel]
+    public 藤蔓.生长 生长 => 玩家配置.main.机制.藤蔓茎生长;
     
     private Rigidbody2D _rb;
     private Vector3 _startPos;
@@ -21,7 +18,7 @@ public class 藤蔓茎 : MonoBehaviour
 
     public IEnumerator MoveUp()
     {
-        yield return MoveTo(_startPos + Vector3.up * distance);
+        yield return MoveTo(_startPos + Vector3.up * 生长.距离);
     }
 
     public IEnumerator MoveDown()
@@ -33,7 +30,7 @@ public class 藤蔓茎 : MonoBehaviour
     {
         while (Mathf.Abs(transform.position.y - target.y) > 0.01f)
         {
-            var step = speed * Time.fixedDeltaTime;
+            var step = 生长.速度 * Time.fixedDeltaTime;
             if (Mathf.Abs(transform.position.y - target.y) <= step)
             {
                 _rb.MovePosition(new Vector2(_rb.position.x, target.y));

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class 藤蔓头 : MonoBehaviour
 {
-    public float speed = 2f;
-    public float distance = 5f;
-
+    [ShowInInspector, HideLabel]
+    public 藤蔓.生长 生长 => 玩家配置.main.机制.藤蔓头生长;
+    
     private Rigidbody2D _rb;
     private Vector3 _startPos;
 
@@ -18,7 +18,7 @@ public class 藤蔓头 : MonoBehaviour
 
     public IEnumerator MoveLeft()
     {
-        yield return MoveTo(_startPos + Vector3.left * distance);
+        yield return MoveTo(_startPos + Vector3.left * 生长.距离);
     }
 
     public IEnumerator MoveRight()
@@ -42,7 +42,7 @@ public class 藤蔓头 : MonoBehaviour
     {
         while (Mathf.Abs(transform.position.x - target.x) > 0.01f)
         {
-            var step = speed * Time.fixedDeltaTime;
+            var step = 生长.速度 * Time.fixedDeltaTime;
             if (Mathf.Abs(transform.position.x - target.x) <= step)
             {
                 _rb.MovePosition(new Vector2(target.x, _rb.position.y));

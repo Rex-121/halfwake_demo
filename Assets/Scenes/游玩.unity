@@ -4038,6 +4038,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 24
   distance: 11
+  "\u751F\u957F":
+    "\u901F\u5EA6": 24
+    "\u8DDD\u79BB": 11
 --- !u!50 &5386876688822480011
 Rigidbody2D:
   serializedVersion: 4
