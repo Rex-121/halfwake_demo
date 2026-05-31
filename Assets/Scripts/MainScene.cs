@@ -12,6 +12,6 @@ public class MainScene : MonoBehaviour
     /// </summary>
     public void LoadPlayerScene()
     {
-        SceneManager.LoadScene("玩家");
+        SceneManager.LoadScene("游玩");
     }
 }

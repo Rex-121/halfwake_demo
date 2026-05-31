@@ -24,8 +24,6 @@ namespace Platform
                 .Subscribe(states =>
                 {
                     var 踩中数量 = states.Count(x => x);
-                    // if (_seq != null) StopCoroutine(_seq);
-Debug.Log(踩中数量);
                     switch (踩中数量)
                     {
                         case 0:
@@ -45,15 +43,7 @@ Debug.Log(踩中数量);
                             break;
                         case 2:
                             if (_seq != null) StopCoroutine(_seq);
-                            // if (latest == 1)
-                            // {
-                            //     _seq = StartCoroutine(头.MoveLeft());
-                            // }
-                            // else if (latest == 0)
-                            // {
-                                _seq = StartCoroutine(展开序列());
-                            // }
-                            
+                            _seq = StartCoroutine(展开序列());
                             break;
                     }
 
@@ -61,13 +51,7 @@ Debug.Log(踩中数量);
                 })
                 .AddTo(this);
         }
-
-
-        [Button]
-        public void  afd()
-        {
-            StartCoroutine(展开序列(1));
-        }
+        
         private IEnumerator 展开序列(int c)
         {
             yield return StartCoroutine(茎.MoveUp());

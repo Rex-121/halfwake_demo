@@ -20,4 +20,8 @@ public class 玩家配置 : SingletonSO<玩家配置>
     [LabelText("录制时间")]
     [SerializeField] public float maxRecordDuration = 4f;
 
+
+    [ShowInInspector, SerializeField]
+    public 机制配置 机制;
+
 }

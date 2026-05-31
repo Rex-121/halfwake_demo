@@ -50,6 +50,7 @@ namespace Platform
             if (platform == null) return;
             tween?.Kill();
             tween = platform.DOMoveY(originY, duration)
+                .SetDelay(玩家配置.main.机制.压力板失效延迟)
                 .SetEase(Ease.InCubic)
                 .OnComplete(() => OnShrinkComplete?.Invoke());
         }

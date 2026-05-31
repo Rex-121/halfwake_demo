@@ -7,6 +7,9 @@ public class 藤蔓茎 : MonoBehaviour
     public float speed = 2f;
     public float distance = 5f;
 
+    [SerializeField]
+    public 藤蔓.生长 生长;
+    
     private Rigidbody2D _rb;
     private Vector3 _startPos;
 

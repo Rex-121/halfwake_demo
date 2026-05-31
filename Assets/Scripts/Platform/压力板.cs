@@ -26,10 +26,14 @@ namespace Platform
 
         [HideInInspector]
         public BehaviorSubject<bool> isActive;
-        
-        private void Start()
+
+        private void Awake()
         {
             isActive = new(false);
+        }
+
+        private void Start()
+        {
             if (animationTransform == null)
                 animationTransform = transform;
             originPos = animationTransform.position;
@@ -75,7 +79,7 @@ namespace Platform
 
         private IEnumerator DD()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(玩家配置.main.机制.压力板失效延迟);
             isActive.OnNext(_wasActivated);
         }
 

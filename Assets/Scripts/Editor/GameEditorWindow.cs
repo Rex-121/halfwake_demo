@@ -30,6 +30,10 @@ namespace Editor
             // tree.Add("判定系统", new JudgeTable());
             tree.AddAllAssetsAtPath("", "Assets/Resources/Singleton");
             
+            // tree.AddAllAssetsAtPath("机制配置", "Assets/Resources", typeof(机制配置));
+
+            tree.AddAssetAtPath("默认机制配置", "Assets/Resources/默认机制配置.asset", typeof(机制配置));
+            
             return tree;
         }
 
