@@ -68,10 +68,16 @@ namespace Platform
             if (!_wasActivated) return;
             _wasActivated = false;
 
-            isActive.OnNext(_wasActivated);
+            // isActive.OnNext(_wasActivated);
+            StartCoroutine(DD());
             上升动画();
         }
 
+        private IEnumerator DD()
+        {
+            yield return new WaitForSeconds(1);
+            isActive.OnNext(_wasActivated);
+        }
 
         private void Activate()
         {

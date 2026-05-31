@@ -169,6 +169,9 @@ namespace Platform
 
         private IEnumerator 播放倒叙(int to)
         {
+            
+            // yield return new WaitForSeconds(1);    
+            
             var d = to;
             while (d >= 0)
             {
