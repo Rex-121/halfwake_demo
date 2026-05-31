@@ -68,11 +68,11 @@ namespace Record
             transform.localScale = playerAvatar.transform.parent.localScale;
 
             // 复制Animator
-            var playerAnimator = playerAvatar.GetComponent<Animator>();
-            if (playerAnimator != null && playerAnimator.runtimeAnimatorController != null)
+            var playerAnimator = playerAvatar.GetComponent<PlayerAnimation>();
+            if (playerAnimator != null && playerAnimator.GetComponent<Animator>().runtimeAnimatorController != null)
             {
                 animator = GetComponent<Animator>() ?? gameObject.AddComponent<Animator>();
-                animator.runtimeAnimatorController = playerAnimator.runtimeAnimatorController;
+                animator.runtimeAnimatorController = playerAnimator.GetComponent<Animator>().runtimeAnimatorController;
             }
 
             // 复制跳跃精灵

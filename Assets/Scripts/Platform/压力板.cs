@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 
 namespace Platform
@@ -21,11 +24,15 @@ namespace Platform
         private Vector3 originPos;
         private Tween _tween;
 
+        [HideInInspector]
+        public BehaviorSubject<bool> isActive;
+        
         private void Start()
         {
-            originPos = transform.position;
+            isActive = new(false);
             if (animationTransform == null)
                 animationTransform = transform;
+            originPos = animationTransform.position;
         }
         
         private void OnTriggerEnter2D(Collider2D other)
@@ -40,6 +47,7 @@ namespace Platform
                     return;
             }
 
+            d++;
             // 若之前未激活，则激活
             if (!_wasActivated)
             {
@@ -47,18 +55,28 @@ namespace Platform
             }
         }
 
+        public int d = 0;
+
         private void OnTriggerExit2D(Collider2D other)
         {
             if (!_wasActivated || !IsValidActivator(other)) return;
+
+            d--;
+            
+            if (d > 0) return;
+            
             if (!_wasActivated) return;
             _wasActivated = false;
 
+            isActive.OnNext(_wasActivated);
             上升动画();
         }
+
 
         private void Activate()
         {
             _wasActivated = true;
+            isActive.OnNext(_wasActivated);
             下降动画();
         }
 
