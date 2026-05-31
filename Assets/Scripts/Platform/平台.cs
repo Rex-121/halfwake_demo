@@ -58,7 +58,21 @@ namespace Platform
             {
                 case Stage.Clear:
                     // 如果是0，说明要直接回到起点
-                    _coroutine = StartCoroutine(播放倒叙(0));
+                    if (zz != Stage.Clear)
+                    {
+                        _coroutine = StartCoroutine(播放倒叙(1));
+                    }
+                    else
+                    {
+                        _coroutine = StartCoroutine(播放倒叙(1));
+                    }
+                    break;
+                case Stage.One:
+
+                    if (zz == Stage.Clear)
+                    {
+                        _coroutine = StartCoroutine(PlayRange(0, 1, "up"));
+                    }
                     
                     // if (zz == Stage.Two)
                     // {
@@ -66,20 +80,8 @@ namespace Platform
                     // }
                     // else
                     // {
-                    //     _coroutine = StartCoroutine(播放倒叙(1));
+                    //     _coroutine = StartCoroutine(PlayRange(0, 1, "up"));
                     // }
-                    
-                    break;
-                case Stage.One:
-
-                    if (zz == Stage.Two)
-                    {
-                        _coroutine = StartCoroutine(播放倒叙(1));
-                    }
-                    else
-                    {
-                        _coroutine = StartCoroutine(PlayRange(0, 1, "up"));
-                    }
                     
                     break;
                 case Stage.Two:
@@ -173,8 +175,11 @@ namespace Platform
                 // c?.Pause();
                 c = animations[to].tween;
                 c.PlayBackwards();
-                yield return new WaitForSeconds(animations[to].duration);
+                
+                yield return new WaitForSeconds(animations[to].duration);    
+                
                 d--;
+                yield return 播放倒叙(d);
             }
         }
         
