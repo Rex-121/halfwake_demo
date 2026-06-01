@@ -52,7 +52,11 @@ namespace Player
 
         private void CheckGround()
         {
-            if (groundCheck == null) return;
+            if (groundCheck == null)
+            {
+                groundCheck = transform.Find("GroundCheck");
+                if (groundCheck == null) return;
+            }
             isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         }
     }
