@@ -22,6 +22,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   moveSpeed: 20
-  jumpForce: 20
+  jumpForce: 25
   maxRecordDuration: 4
   "\u673A\u5236": {fileID: 11400000, guid: fbf1ca7c2098f41b4baf22c4c800ef77, type: 2}
