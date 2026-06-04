@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "halfwake_demo.sln"
+    "dotnet.defaultSolution": "halfwake_demo.sln",
+    "Codegeex.RepoIndex": true
 }

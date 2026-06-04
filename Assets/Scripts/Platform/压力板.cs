@@ -20,6 +20,12 @@ namespace Platform
         [SerializeField] private float pressDuration = 0.3f;
         [SerializeField] private Transform animationTransform;
 
+        [Header("音效")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip pressedClip;
+        [SerializeField] private AudioClip releasedClip;
+        [SerializeField, Range(0f, 1f)] private float audioVolume = 1f;
+
         private bool _wasActivated;
         private Vector3 originPos;
         private Tween _tween;
@@ -75,6 +81,7 @@ namespace Platform
             // isActive.OnNext(_wasActivated);
             StartCoroutine(DD());
             上升动画();
+            PlayReleasedSound();
         }
 
         private IEnumerator DD()
@@ -88,6 +95,7 @@ namespace Platform
             _wasActivated = true;
             isActive.OnNext(_wasActivated);
             下降动画();
+            PlayPressedSound();
         }
 
         [Button]
@@ -106,6 +114,27 @@ namespace Platform
             _tween = animationTransform.DOMoveY(originPos.y, pressDuration)
                 .SetEase(Ease.InOutCubic);
         }
+
+        public void PlayPressedSound()
+        {
+            PlaySound(pressedClip);
+        }
+
+        public void PlayReleasedSound()
+        {
+            PlaySound(releasedClip);
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (clip == null) return;
+
+            var source = audioSource != null ? audioSource : GetComponent<AudioSource>();
+            if (source == null) return;
+
+            source.PlayOneShot(clip, audioVolume);
+        }
+
         private bool IsValidActivator(Collider2D col)
         {
             var root = col.attachedRigidbody != null? col.attachedRigidbody.gameObject: col.gameObject;                                                  

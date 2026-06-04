@@ -57,17 +57,20 @@ namespace Platform
             yield return StartCoroutine(茎.MoveUp());
             if (c < 2) yield break;
             yield return StartCoroutine(头.MoveLeft());
+
         }
         private IEnumerator 展开序列()
         {
             yield return StartCoroutine(茎.MoveUp());
             yield return StartCoroutine(头.MoveLeft());
+
         }
 
         private IEnumerator 收缩序列()
         {
             yield return StartCoroutine(头.MoveRight());
             yield return StartCoroutine(茎.MoveDown());
+
         }
     }
 }

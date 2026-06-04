@@ -26,6 +26,12 @@ namespace Platform
         [SerializeField] private float pressDuration = 0.3f;
         [SerializeField] private Transform animationTransform;
 
+        [Header("音效")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip pressedClip;
+        [SerializeField] private AudioClip releasedClip;
+        [SerializeField, Range(0f, 1f)] private float audioVolume = 1f;
+
         [Header("事件")]
         public UnityEvent OnPressed;
         public UnityEvent OnReleased;
@@ -95,6 +101,7 @@ namespace Platform
 
             OnActivationChanged?.Invoke(this, true);
             OnPressed?.Invoke();
+            PlayPressedSound();
         }
 
         private void Deactivate()
@@ -108,7 +115,29 @@ namespace Platform
 
             OnActivationChanged?.Invoke(this, false);
             OnReleased?.Invoke();
+            PlayReleasedSound();
         }
+
+        public void PlayPressedSound()
+        {
+            PlaySound(pressedClip);
+        }
+
+        public void PlayReleasedSound()
+        {
+            PlaySound(releasedClip);
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (clip == null) return;
+
+            var source = audioSource != null ? audioSource : GetComponent<AudioSource>();
+            if (source == null) return;
+
+            source.PlayOneShot(clip, audioVolume);
+        }
+
         //显示自己
         public void OnShowMe()
         {
